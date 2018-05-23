@@ -301,6 +301,7 @@ class LSRenderSliverToBoxAdapter extends RenderSliverSingleBoxAdapter {
     bool onRefreshExtent =
         constraints.remainingPaintExtent == _getChildExtent();
     bool outOfViewport = constraints.remainingPaintExtent <= 0;
+
     switch (_refreshState) {
       case LSRefreshState.inactive:
         _loadComplete = false;
@@ -334,10 +335,15 @@ class LSRenderSliverToBoxAdapter extends RenderSliverSingleBoxAdapter {
         if (_loadComplete) {
           _refreshState = LSRefreshState.done;
         }
+        if (outOfViewport) {
+          continue done;
+        }
         break;
+        done:
       case LSRefreshState.done:
         if (outOfViewport) {
           _refreshState = LSRefreshState.inactive;
+          _loadComplete = false;
         }
         break;
     }
@@ -385,6 +391,7 @@ class LSRenderSliverToBoxAdapter extends RenderSliverSingleBoxAdapter {
 
     if (_refreshState == LSRefreshState.refresh && onRefresh != null) {
       onRefresh().then((result) {
+        _runStateMachine();
         if (imageProvider != null) {
           imageProvider.stop();
         }

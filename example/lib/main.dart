@@ -21,7 +21,7 @@ class _DemoState
   }
 
   double outExtent = 0.0;
-  int _listCount = 6;
+  int _listCount = 16;
   ScrollController _scrollController = new ScrollController();
   @override
   Widget build(BuildContext context) {

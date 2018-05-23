@@ -166,7 +166,6 @@ class _LSTopRefresherState extends State<LSTopRefresher> {
 
   LSRefreshState transitionNextState() {
     LSRefreshState nextState;
-  print(refreshState);
     void goToDone() {
       nextState = LSRefreshState.done;
       if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.idle) {
@@ -420,7 +419,7 @@ class _RenderLSRefreshSliver extends RenderSliver
     // Layout the child giving it the space of the currently dragged overscroll
     // which may or may not include a sliver layout extent space that it will
     // keep after the user lets go during the refresh process.
-    print(constraints);
+
     child.layout(
       constraints.asBoxConstraints(
         maxExtent: layoutExtent + overscrolledExtent,
@@ -428,18 +427,28 @@ class _RenderLSRefreshSliver extends RenderSliver
       parentUsesSize: true,
     );
     if (active) {
+      var paintExtent = max(
+        max(child.size.height, layoutExtent) - constraints.scrollOffset,
+        0.0,
+      );
+      var maxPaintExtent = max(
+        max(child.size.height, layoutExtent) - constraints.scrollOffset,
+        0.0,
+      );
+      var layoutET = max(layoutExtent - constraints.scrollOffset, 0.0);
+      var paintOrigin = -overscrolledExtent - constraints.scrollOffset;
+      if(constraints.overlap == -child.size.height && !hasLayoutExtent) {
+        paintExtent = 0.0;
+        maxPaintExtent = 0.0;
+        layoutET = 0.0;
+        paintOrigin = 0.0;
+      }
       geometry = new SliverGeometry(
         scrollExtent: layoutExtent,
-        paintOrigin: -overscrolledExtent - constraints.scrollOffset,
-        paintExtent: max(
-          max(child.size.height, layoutExtent) - constraints.scrollOffset,
-          0.0,
-        ),
-        maxPaintExtent: max(
-          max(child.size.height, layoutExtent) - constraints.scrollOffset,
-          0.0,
-        ),
-        layoutExtent: max(layoutExtent - constraints.scrollOffset, 0.0),
+        paintOrigin: paintOrigin,
+        paintExtent: paintExtent,
+        maxPaintExtent: maxPaintExtent,
+        layoutExtent: layoutET,
       );
 
       if (imageProvider != null) {
