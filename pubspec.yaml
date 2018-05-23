@@ -1,8 +1,12 @@
 name: ls_refresher
 description: A scrollView refresher package.
 version: 0.0.1
-author: littleStrong
+author: littleStrong<cxq302@126.com>
 homepage: https://github.com/cxq1221/ls_refresher.git
+
+environment:
+  sdk: ">=2.0.0-dev.28.0 <3.0.0"
+  flutter: ">=0.1.4 <2.0.0"
 
 dependencies:
   flutter:
