@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'dart:ui' as ui;
 
 const double kDefaultRefreshTriggerPullDistance = 60.0;
-const double kDefaultRefreshIndicatorExtent = 50.0;
+const double kDefaultRefreshIndicatorExtent = 60.0;
 
 enum LSRefreshState {
   /// Initial state, when not being overscrolled into, or after the overscroll

@@ -7,6 +7,7 @@ import 'dart:async';
 import 'dart:math' show Random;
 import 'dart:ui' as ui;
 import 'package:ls_refresher/ls_refresher.dart';
+import 'package:flutter/cupertino.dart';
 
 class _DemoState
     extends State<Demo> {
@@ -20,28 +21,26 @@ class _DemoState
   }
 
   double outExtent = 0.0;
-  int _listCount = 10;
+  int _listCount = 6;
   ScrollController _scrollController = new ScrollController();
   @override
   Widget build(BuildContext context) {
     return new DefaultTextStyle(
       style: new TextStyle(fontSize: 17.0),
       child: new Scaffold(
-        body: new Container(
-          margin: new EdgeInsets.only(top: 60.0),
-          height: 550.0,
-          decoration: new BoxDecoration(color: Colors.amber),
-          child: new CustomScrollView(
-            slivers: <Widget>[
-//              new LSTopRefresher.image('images/test.gif', 'images/test2.gif',
-//                  onRefresh: () {
-//                return new Future<void>.delayed(const Duration(seconds: 2))
-//                  ..then((re) {
-//                    setState(() {
-//                      changeRandomList();
-//                    });
+        appBar: new AppBar(title: new Text('Title'),),
+        body: new CustomScrollView(
+          slivers: <Widget>[
+
+//            new LSTopRefresher.image('images/bear.gif', 'images/ice.gif',
+//                onRefresh: () {
+//              return new Future<void>.delayed(const Duration(seconds: 2))
+//                ..then((re) {
+//                  setState(() {
+//                    changeRandomList();
 //                  });
-//              }),
+//                });
+//            }),
               new LSTopRefresher.simple(onRefresh: () {
                 return new Future<void>.delayed(const Duration(seconds: 2))
                   ..then((re) {
@@ -50,19 +49,19 @@ class _DemoState
                     });
                   });
               }),
-              new SliverList(
-                delegate: new SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return new _ListItem(
-                      name: randomizedContacts[index][0] + '$index',
-                      place: randomizedContacts[index][1],
-                      date: randomizedContacts[index][2],
-                      called: randomizedContacts[index][3] == 'true',
-                    );
-                  },
-                  childCount: _listCount,
-                ),
+            new SliverList(
+              delegate: new SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return new _ListItem(
+                    name: randomizedContacts[index][0] + '$index',
+                    place: randomizedContacts[index][1],
+                    date: randomizedContacts[index][2],
+                    called: randomizedContacts[index][3] == 'true',
+                  );
+                },
+                childCount: _listCount,
               ),
+            ),
 //              new LSBottomRefresher.simple(
 //                onRefresh: () {
 //                  return new Future<void>.delayed(const Duration(seconds: 2))
@@ -73,20 +72,19 @@ class _DemoState
 //                    });
 //                },
 //              )
-              new LSBottomRefresher.image(
-                'images/test3.gif',
-                'images/test4.gif',
-                onRefresh: () {
-                  return new Future<void>.delayed(const Duration(seconds: 2))
-                    ..then((re) {
-//                      setState(() {
-//                        _listCount += 1;
-//                      });
-                    });
-                },
-              )
-            ],
-          ),
+            new LSBottomRefresher.image(
+              'images/bread.gif',
+              'images/sea.gif',
+              onRefresh: () {
+                return new Future<void>.delayed(const Duration(seconds: 2))
+                  ..then((re) {
+                      setState(() {
+                        _listCount += 1;
+                      });
+                  });
+              },
+            )
+          ],
         ),
       ),
     );

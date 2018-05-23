@@ -1,18 +1,16 @@
-# example
 
-A new Flutter application.
-
-## Getting Started
-
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+## Features
+- Drag down refresh, pull up refresh.
+- Simply used within CustomScrollView.
+- Diy the widget displayed on over-scroll area. (use your own builder)
+- Gif image support, image changed along with drag offset.
 
 ### import:
-```
+```dart
 import 'package:ls_refresher/ls_refresher.dart';
 ```
 ### then:
-```
+```dart
 new CustomScrollView(
             slivers: <Widget>[
 //              new LSTopRefresher.image('images/test.gif', 'images/test2.gif',

@@ -97,8 +97,8 @@ class LSBottomRefresher extends StatefulWidget {
               .transform(min(pulledExtent / refreshIndicatorExtent * 2.0, 1.0))
           : 1.0,
       child: new Container(
-        height: 70.0,
-        width: 70.0,
+        height: 60.0,
+        width: 60.0,
         alignment: Alignment.center,
         child: new RawImage(
           image: rawImage,
@@ -225,8 +225,10 @@ class LSRenderSliverToBoxAdapter extends RenderSliverSingleBoxAdapter {
   final double refreshIndicatorExtent;
   final String dragGif;
   final String refreshGif;
+  int _lastIndexOfGifImage = -1;
   LSImageProvider _dragImageProvider;
   LSImageProvider _refreshImageProvider;
+  bool isContentOverSize;
 
   LSImageProvider get imageProvider {
     if (_refreshState == LSRefreshState.drag) {
@@ -271,8 +273,6 @@ class LSRenderSliverToBoxAdapter extends RenderSliverSingleBoxAdapter {
       }
     }
   }
-
-  int lastIndexOfGifImage = -1;
 
   _getChildExtent() {
     switch (constraints.axis) {
@@ -350,6 +350,13 @@ class LSRenderSliverToBoxAdapter extends RenderSliverSingleBoxAdapter {
       return;
     }
     child.layout(constraints.asBoxConstraints(), parentUsesSize: true);
+    if (isContentOverSize == null) {
+      isContentOverSize = constraints.remainingPaintExtent <= 0.0;
+    }
+    if (!isContentOverSize) {
+      geometry = SliverGeometry.zero;
+      return;
+    }
 
     double childExtent = _getChildExtent();
     final double paintedChildSize =
@@ -409,10 +416,10 @@ class LSRenderSliverToBoxAdapter extends RenderSliverSingleBoxAdapter {
             double percent = paintedChildSize / child.size.height;
             int indexOfGifImage =
                 (percent * imageProvider.frameCount.toDouble()).toInt();
-            if (indexOfGifImage != lastIndexOfGifImage) {
+            if (indexOfGifImage != _lastIndexOfGifImage) {
               imageProvider.getImage(index: indexOfGifImage);
             }
-            lastIndexOfGifImage = indexOfGifImage;
+            _lastIndexOfGifImage = indexOfGifImage;
           }
         }
       }

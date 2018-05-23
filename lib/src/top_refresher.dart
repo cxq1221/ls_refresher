@@ -102,10 +102,11 @@ class LSTopRefresher extends StatefulWidget {
       ui.Image rawImage) {
     return new Center(
       child: new SizedBox(
-        width: 50.0,
+        width: 60.0,
+        height: 60.0,
         child: new Stack(children: <Widget>[
           new Positioned(
-            child: new LSImage(rawImage, width: 40.0, height: 40.0),
+            child: new LSImage(rawImage, width: 50.0, height: 50.0),
             bottom: 5.0,
           )
         ]),
@@ -165,7 +166,7 @@ class _LSTopRefresherState extends State<LSTopRefresher> {
 
   LSRefreshState transitionNextState() {
     LSRefreshState nextState;
-
+  print(refreshState);
     void goToDone() {
       nextState = LSRefreshState.done;
       if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.idle) {
@@ -312,6 +313,8 @@ class _LSTopRefresherState extends State<LSTopRefresher> {
           imageProvider.getImage(index: indexOfGifImage);
         }
         lastIndexOfGifImage = indexOfGifImage;
+      } else {
+        imageProvider.stop();
       }
     }
   }
@@ -410,12 +413,14 @@ class _RenderLSRefreshSliver extends RenderSliver
       return;
     }
 
-    final bool active = constraints.overlap < 0.0 || layoutExtent > 0.0;
+    bool active = constraints.overlap < 0.0 || layoutExtent > 0.0;
+//    active = hasLayoutExtent;
     final double overscrolledExtent =
         constraints.overlap < 0.0 ? constraints.overlap.abs() : 0.0;
     // Layout the child giving it the space of the currently dragged overscroll
     // which may or may not include a sliver layout extent space that it will
     // keep after the user lets go during the refresh process.
+    print(constraints);
     child.layout(
       constraints.asBoxConstraints(
         maxExtent: layoutExtent + overscrolledExtent,
