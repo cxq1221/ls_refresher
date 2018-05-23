@@ -3,33 +3,20 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'dart:async';
 import 'dart:math' show Random;
 import 'dart:ui' as ui;
 import 'package:ls_refresher/ls_refresher.dart';
 
-// Uncomment lines 7 and 10 to view the visual layout at runtime.
-//import 'package:flutter/rendering.dart' show debugPaintSizeEnabled;
-
-class _CupertinoRefreshControlDemoState
-    extends State<CupertinoRefreshControlDemo> {
+class _DemoState
+    extends State<Demo> {
   List<List<String>> randomizedContacts;
   List<ui.Image> rawImages = [];
   ui.Image rawImage;
   @override
   void initState() {
     super.initState();
-    repopulateList();
-  }
-
-  void repopulateList() {
-    final Random random = new Random();
-    randomizedContacts = new List<List<String>>.generate(100, (int index) {
-      return contacts[random.nextInt(contacts.length)]
-        // Randomly adds a telephone icon next to the contact or not.
-        ..add(random.nextBool().toString());
-    });
+    changeRandomList();
   }
 
   double outExtent = 0.0;
@@ -39,33 +26,30 @@ class _CupertinoRefreshControlDemoState
   Widget build(BuildContext context) {
     return new DefaultTextStyle(
       style: new TextStyle(fontSize: 17.0),
-      child: new CupertinoPageScaffold(
-        child: new Container(
+      child: new Scaffold(
+        body: new Container(
           margin: new EdgeInsets.only(top: 60.0),
           height: 550.0,
           decoration: new BoxDecoration(color: Colors.amber),
           child: new CustomScrollView(
             slivers: <Widget>[
-              new LSTopRefresher.image('images/test.gif', 'images/test2.gif',
-                  onRefresh: () {
-                return new Future<void>.delayed(const Duration(seconds: 2))
-                  ..then((re) {
-                    setState(() {
-                      repopulateList();
-                    });
-                  });
-              }),
-//              new LSTopRefresher.simple(onRefresh: () {
+//              new LSTopRefresher.image('images/test.gif', 'images/test2.gif',
+//                  onRefresh: () {
 //                return new Future<void>.delayed(const Duration(seconds: 2))
 //                  ..then((re) {
 //                    setState(() {
-//                      repopulateList();
+//                      changeRandomList();
 //                    });
 //                  });
 //              }),
-//              new CupertinoRefreshControl(onRefresh: () {
-//                return new Future<void>.delayed(const Duration(seconds: 2));
-//              }),
+              new LSTopRefresher.simple(onRefresh: () {
+                return new Future<void>.delayed(const Duration(seconds: 2))
+                  ..then((re) {
+                    setState(() {
+                      changeRandomList();
+                    });
+                  });
+              }),
               new SliverList(
                 delegate: new SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
@@ -107,6 +91,15 @@ class _CupertinoRefreshControlDemoState
       ),
     );
   }
+
+  void changeRandomList() {
+    final Random random = new Random();
+    randomizedContacts = new List<List<String>>.generate(100, (int index) {
+      return contacts[random.nextInt(contacts.length)]
+      // Randomly adds a telephone icon next to the contact or not.
+        ..add(random.nextBool().toString());
+    });
+  }
 }
 
 void main() {
@@ -119,9 +112,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: 'Flutter Demo',
-      theme: new ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: new ThemeData().copyWith(platform: TargetPlatform.iOS),
       home: new MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -151,16 +142,16 @@ List<Widget> list = <Widget>[
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return new CupertinoRefreshControlDemo();
+    return new Demo();
   }
 }
 
-class CupertinoRefreshControlDemo extends StatefulWidget {
+class Demo extends StatefulWidget {
   static const String routeName = '/cupertino/refresh';
 
   @override
-  _CupertinoRefreshControlDemoState createState() =>
-      new _CupertinoRefreshControlDemoState();
+  _DemoState createState() =>
+      new _DemoState();
 }
 
 List<List<String>> contacts = <List<String>>[
@@ -190,24 +181,10 @@ class _ListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Container(
-      color: CupertinoColors.activeGreen,
       height: 60.0,
       padding: const EdgeInsets.only(top: 9.0),
       child: new Row(
         children: <Widget>[
-          new Container(
-            width: 38.0,
-            child: called
-                ? const Align(
-                    alignment: Alignment.topCenter,
-                    child: const Icon(
-                      CupertinoIcons.phone_solid,
-                      color: CupertinoColors.inactiveGray,
-                      size: 18.0,
-                    ),
-                  )
-                : null,
-          ),
           new Expanded(
             child: new Container(
               decoration: const BoxDecoration(
@@ -241,7 +218,6 @@ class _ListItem extends StatelessWidget {
                           style: const TextStyle(
                             fontSize: 15.0,
                             letterSpacing: -0.24,
-                            color: CupertinoColors.inactiveGray,
                           ),
                         ),
                       ],
@@ -250,15 +226,9 @@ class _ListItem extends StatelessWidget {
                   new Text(
                     date,
                     style: const TextStyle(
-                      color: CupertinoColors.inactiveGray,
                       fontSize: 15.0,
                       letterSpacing: -0.41,
                     ),
-                  ),
-                  const Padding(
-                    padding: const EdgeInsets.only(left: 9.0),
-                    child: const Icon(CupertinoIcons.info,
-                        color: CupertinoColors.activeBlue),
                   ),
                 ],
               ),
