@@ -1,11 +1,15 @@
 
-## Features
+## features
 - Drag down refresh, pull up refresh.
 - Simply used within CustomScrollView.
 - Diy the widget displayed on over-scroll area. (use your own builder)
 - Gif image support, image changed along with drag offset.
 
-### import:
+### warning
+LSTopRefresher is based on CupertinoRefreshControl, so it has a bug that when the items can not fill the ScrollView, it would not bounce back when refesh task completed
+
+
+### Start:
 ```dart
 import 'package:ls_refresher/ls_refresher.dart';
 ```
