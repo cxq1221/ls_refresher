@@ -53,13 +53,6 @@ class LSTopRefresher extends StatefulWidget {
     return state.refreshState;
   }
 
-  displayWidget(LSRefreshState refreshState) {
-    if (refreshState == LSRefreshState.armed ||
-        refreshState ==
-            LSRefreshState.refresh) {} else if (refreshState ==
-        LSRefreshState.inactive) {} else {}
-  }
-
   static Widget buildDefaultRefreshIndicator(
       BuildContext context,
       LSRefreshState refreshState,
@@ -401,9 +394,7 @@ class _RenderLSRefreshSliver extends RenderSliver
     // The new layout extent this sliver should now have.
     final double layoutExtent =
         (_hasLayoutExtent ? 1.0 : 0.0) * _refreshIndicatorExtent;
-    // If the new layoutExtent instructive changed, the SliverGeometry's
-    // layoutExtent will take that value (on the next performLayout run). Shift
-    // the scroll offset first so it doesn't make the scroll position suddenly jump.
+
     if (layoutExtent != layoutExtentOffsetCompensation) {
       geometry = new SliverGeometry(
         scrollOffsetCorrection: layoutExtent - layoutExtentOffsetCompensation,
@@ -413,12 +404,8 @@ class _RenderLSRefreshSliver extends RenderSliver
     }
 
     bool active = constraints.overlap < 0.0 || layoutExtent > 0.0;
-//    active = hasLayoutExtent;
     final double overscrolledExtent =
         constraints.overlap < 0.0 ? constraints.overlap.abs() : 0.0;
-    // Layout the child giving it the space of the currently dragged overscroll
-    // which may or may not include a sliver layout extent space that it will
-    // keep after the user lets go during the refresh process.
 
     child.layout(
       constraints.asBoxConstraints(
@@ -437,12 +424,6 @@ class _RenderLSRefreshSliver extends RenderSliver
       );
       var layoutET = max(layoutExtent - constraints.scrollOffset, 0.0);
       var paintOrigin = -overscrolledExtent - constraints.scrollOffset;
-      if(constraints.overlap == -child.size.height && !hasLayoutExtent) {
-        paintExtent = 0.0;
-        maxPaintExtent = 0.0;
-        layoutET = 0.0;
-        paintOrigin = 0.0;
-      }
       geometry = new SliverGeometry(
         scrollExtent: layoutExtent,
         paintOrigin: paintOrigin,

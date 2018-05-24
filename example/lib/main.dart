@@ -9,8 +9,7 @@ import 'dart:ui' as ui;
 import 'package:ls_refresher/ls_refresher.dart';
 import 'package:flutter/cupertino.dart';
 
-class _DemoState
-    extends State<Demo> {
+class _DemoState extends State<Demo> {
   List<List<String>> randomizedContacts;
   List<ui.Image> rawImages = [];
   ui.Image rawImage;
@@ -28,38 +27,45 @@ class _DemoState
     return new DefaultTextStyle(
       style: new TextStyle(fontSize: 17.0),
       child: new Scaffold(
-        appBar: new AppBar(title: new Text('Title'),),
+        appBar: new AppBar(
+          title: new Text('Title'),
+        ),
         body: new CustomScrollView(
+          controller: _scrollController,
           slivers: <Widget>[
-
-//            new LSTopRefresher.image('images/bear.gif', 'images/ice.gif',
-//                onRefresh: () {
+            new LSTopRefresher.image('images/bear.gif', 'images/ice.gif',
+                onRefresh: () {
+              return new Future<void>.delayed(const Duration(seconds: 2))
+                ..then((re) {
+                  setState(() {
+                    changeRandomList();
+                  });
+                });
+            }),
+//            new LSTopRefresher.simple(onRefresh: () {
 //              return new Future<void>.delayed(const Duration(seconds: 2))
 //                ..then((re) {
 //                  setState(() {
 //                    changeRandomList();
+//                    _scrollController.animateTo(0.0,
+//                        duration: new Duration(milliseconds: 100),
+//                        curve: Curves.bounceOut);
 //                  });
 //                });
 //            }),
-              new LSTopRefresher.simple(onRefresh: () {
-                return new Future<void>.delayed(const Duration(seconds: 2))
-                  ..then((re) {
-                    setState(() {
-                      changeRandomList();
-                    });
-                  });
-              }),
-            new SliverList(
-              delegate: new SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return new _ListItem(
-                    name: randomizedContacts[index][0] + '$index',
-                    place: randomizedContacts[index][1],
-                    date: randomizedContacts[index][2],
-                    called: randomizedContacts[index][3] == 'true',
-                  );
-                },
-                childCount: _listCount,
+            new SliverSafeArea(
+              sliver: new SliverList(
+                delegate: new SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return new _ListItem(
+                      name: randomizedContacts[index][0] + '$index',
+                      place: randomizedContacts[index][1],
+                      date: randomizedContacts[index][2],
+                      called: randomizedContacts[index][3] == 'true',
+                    );
+                  },
+                  childCount: _listCount,
+                ),
               ),
             ),
 //              new LSBottomRefresher.simple(
@@ -78,9 +84,9 @@ class _DemoState
               onRefresh: () {
                 return new Future<void>.delayed(const Duration(seconds: 2))
                   ..then((re) {
-                      setState(() {
-                        _listCount += 1;
-                      });
+                    setState(() {
+                      _listCount += 1;
+                    });
                   });
               },
             )
@@ -92,9 +98,10 @@ class _DemoState
 
   void changeRandomList() {
     final Random random = new Random();
+    _listCount -= 1;
     randomizedContacts = new List<List<String>>.generate(100, (int index) {
       return contacts[random.nextInt(contacts.length)]
-      // Randomly adds a telephone icon next to the contact or not.
+        // Randomly adds a telephone icon next to the contact or not.
         ..add(random.nextBool().toString());
     });
   }
@@ -148,8 +155,7 @@ class Demo extends StatefulWidget {
   static const String routeName = '/cupertino/refresh';
 
   @override
-  _DemoState createState() =>
-      new _DemoState();
+  _DemoState createState() => new _DemoState();
 }
 
 List<List<String>> contacts = <List<String>>[
