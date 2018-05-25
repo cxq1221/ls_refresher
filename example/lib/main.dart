@@ -8,6 +8,7 @@ import 'dart:math' show Random;
 import 'dart:ui' as ui;
 import 'package:ls_refresher/ls_refresher.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/scheduler.dart';
 
 class _DemoState extends State<Demo> {
   List<List<String>> randomizedContacts;
@@ -20,7 +21,7 @@ class _DemoState extends State<Demo> {
   }
 
   double outExtent = 0.0;
-  int _listCount = 16;
+  int _listCount = 14;
   ScrollController _scrollController = new ScrollController();
   @override
   Widget build(BuildContext context) {
@@ -32,8 +33,9 @@ class _DemoState extends State<Demo> {
         ),
         body: new CustomScrollView(
           controller: _scrollController,
+          physics: new AlwaysScrollableScrollPhysics(),
           slivers: <Widget>[
-            new LSTopRefresher.image('images/bear.gif', 'images/ice.gif',
+            new LSTopRefresher.image('images/giphy.gif', 'images/bread.gif',
                 onRefresh: () {
               return new Future<void>.delayed(const Duration(seconds: 2))
                 ..then((re) {
@@ -79,7 +81,7 @@ class _DemoState extends State<Demo> {
 //                },
 //              )
             new LSBottomRefresher.image(
-              'images/bread.gif',
+              'images/ice.gif',
               'images/sea.gif',
               onRefresh: () {
                 return new Future<void>.delayed(const Duration(seconds: 2))
@@ -98,7 +100,7 @@ class _DemoState extends State<Demo> {
 
   void changeRandomList() {
     final Random random = new Random();
-    _listCount -= 1;
+//    _listCount -= 1;
     randomizedContacts = new List<List<String>>.generate(100, (int index) {
       return contacts[random.nextInt(contacts.length)]
         // Randomly adds a telephone icon next to the contact or not.

@@ -9,7 +9,7 @@
 LSTopRefresher is based on CupertinoRefreshControl, so it has a bug that when the items can not fill the ScrollView, it would not bounce back when refesh task completed
 
 
-### Start:
+### start:
 ```dart
 import 'package:ls_refresher/ls_refresher.dart';
 ```

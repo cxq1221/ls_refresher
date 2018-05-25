@@ -31,7 +31,9 @@ class LSImageProvider extends ImageProvider<AssetBundleImageKey> {
   }
 
   stop() {
-    completer?.stop();
+    if (completer != null) {
+      completer.stop();
+    }
   }
 
   MyImageStreamCompleter completer;

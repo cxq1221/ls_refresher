@@ -242,9 +242,13 @@ class _LSTopRefresherState extends State<LSTopRefresher> {
 
   var lastIndexOfGifImage = 0;
   get imageProvider {
-    if (refreshState == LSRefreshState.refresh ||
-        refreshState == LSRefreshState.armed ||
-        refreshState == LSRefreshState.done) {
+    if (refreshState == LSRefreshState.drag) {
+      return dragImageProvider;
+    } else if (refreshState == LSRefreshState.armed) {
+      return refreshImageProvider;
+    } else if (refreshState == LSRefreshState.refresh) {
+      return refreshImageProvider;
+    } else if (refreshState == LSRefreshState.done) {
       return refreshImageProvider;
     } else {
       return dragImageProvider;
@@ -252,9 +256,13 @@ class _LSTopRefresherState extends State<LSTopRefresher> {
   }
 
   get rawImage {
-    if (refreshState == LSRefreshState.refresh ||
-        refreshState == LSRefreshState.armed ||
-        refreshState == LSRefreshState.done) {
+    if (refreshState == LSRefreshState.drag) {
+      return _dragRawImage;
+    } else if (refreshState == LSRefreshState.armed) {
+      return _rereshRawImage;
+    } else if (refreshState == LSRefreshState.refresh) {
+      return _rereshRawImage;
+    } else if (refreshState == LSRefreshState.done) {
       return _rereshRawImage;
     } else {
       return _dragRawImage;
@@ -293,21 +301,22 @@ class _LSTopRefresherState extends State<LSTopRefresher> {
     if (imageProvider == null) {
       return;
     }
-    if (refreshState == LSRefreshState.refresh) {
+    if (refreshState == LSRefreshState.refresh ||
+        refreshState == LSRefreshState.done ||
+        refreshState == LSRefreshState.armed) {
       imageProvider.palyAsUsual(true);
-    } else {
-      if (refreshState != LSRefreshState.done) {
-        //根据offset展示图片
-        double percent = lastIndicatorExtent / 50.0;
-        int indexOfGifImage =
-            (percent * imageProvider.frameCount.toDouble()).toInt();
-        if (indexOfGifImage != lastIndexOfGifImage) {
-          imageProvider.getImage(index: indexOfGifImage);
-        }
-        lastIndexOfGifImage = indexOfGifImage;
-      } else {
-        imageProvider.stop();
+    } else if (refreshState == LSRefreshState.drag) {
+      print(refreshTask == null);
+      //根据offset展示图片
+      double percent = lastIndicatorExtent / 50.0;
+      int indexOfGifImage =
+          (percent * imageProvider.frameCount.toDouble()).toInt();
+      if (indexOfGifImage != lastIndexOfGifImage) {
+        imageProvider.getImage(index: indexOfGifImage);
       }
+      lastIndexOfGifImage = indexOfGifImage;
+    } else if (refreshState == LSRefreshState.inactive) {
+      imageProvider.stop();
     }
   }
 }
