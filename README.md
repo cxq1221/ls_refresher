@@ -5,8 +5,12 @@
 - Diy the widget displayed on over-scroll area. (use your own builder)
 - Gif image support, image changed along with drag offset.
 
+![LSTopRefresher](https://github.com/cxq1221/ls_refresher/blob/master/images/top.GIF)
+
+![LSBottomRefresher](https://github.com/cxq1221/ls_refresher/blob/master/images/bottom.GIF)
+
 ### warning
-LSTopRefresher is based on CupertinoRefreshControl, so it has a bug that when the items can not fill the ScrollView, it would not bounce back when refesh task completed
+LSTopRefresher is based on CupertinoRefreshControl, so it has a bug that when the items can not fill the ScrollView, it would not bounce back when refesh task completed, which exists on beta verision of flutter,  but it has been fixed on its master channel
 
 
 ### start:
