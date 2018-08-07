@@ -180,7 +180,7 @@ class MyImageStreamCompleter extends ImageStreamCompleter {
   }
 
   @override
-  void addListener(ImageListener listener) {
+  void addListener(ImageListener listener, { ImageErrorListener onError }) {
     if (!_hasActiveListeners && _codec != null) {
       _fetchNextFrameAndSchedule();
     }
