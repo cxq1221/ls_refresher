@@ -1,8 +1,8 @@
 name: ls_refresher
 description: A scrollView refresher package.
-version: 0.0.3
-author: littleStrong<cxq302@126.com>
-homepage: https://github.com/cxq1221/ls_refresher.git
+version: 0.0.4
+author: Michael Zhou<zhoulujue@gmail.com>
+homepage: https://github.com/zhoulujue/ls_refresher
 
 environment:
   sdk: ">=2.0.0-dev.28.0 <3.0.0"
