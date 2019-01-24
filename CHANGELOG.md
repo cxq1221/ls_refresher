@@ -1,3 +1,4 @@
+## [0.0.7] - feat: Support TopOffset For TopRefresher
 ## [0.0.6] - fix: bottomRrfresher not working well on some Android Phone and some situation
 
 ## [0.0.5] - fix: onRefreshExtent
