@@ -19,6 +19,7 @@ class LSTopRefresher extends StatefulWidget {
     this.refreshGif, {
     this.refreshTriggerPullDistance: kDefaultRefreshTriggerPullDistance,
     this.refreshIndicatorExtent: kDefaultRefreshIndicatorExtent,
+        this.paintOriginYOffset : kDefaultTopRefreshPaintOriginYOffset,
     this.builder: buildImageRefreshIndicator,
     this.onRefresh,
   });
@@ -26,6 +27,7 @@ class LSTopRefresher extends StatefulWidget {
   const LSTopRefresher.simple(
       {this.refreshTriggerPullDistance: kDefaultRefreshTriggerPullDistance,
       this.refreshIndicatorExtent: kDefaultRefreshIndicatorExtent,
+        this.paintOriginYOffset : kDefaultTopRefreshPaintOriginYOffset,
       this.builder: buildDefaultRefreshIndicator,
       this.onRefresh,
       this.dragGif,
@@ -39,6 +41,7 @@ class LSTopRefresher extends StatefulWidget {
             'The refresh indicator cannot take more space in its final state '
             'than the amount initially created by overscrolling.');
 
+  final double paintOriginYOffset;
   final double refreshTriggerPullDistance;
   final double refreshIndicatorExtent;
   final RefresherIndicatorBuilder builder;
@@ -272,6 +275,7 @@ class _LSTopRefresherState extends State<LSTopRefresher> {
   @override
   Widget build(BuildContext context) {
     return new _LSRefreshSliver(
+        paintOriginYOffset : widget.paintOriginYOffset,
         refreshIndicatorLayoutExtent: widget.refreshIndicatorExtent,
         hasLayoutExtent: hasSliverLayoutExtent,
         onImageEmit: (rawImage) {},
@@ -326,13 +330,17 @@ typedef _RawImageCallback(ui.Image image);
 class _LSRefreshSliver extends SingleChildRenderObjectWidget {
   const _LSRefreshSliver(
       {this.refreshIndicatorLayoutExtent: 0.0,
+        this.paintOriginYOffset: 0.0,
       this.hasLayoutExtent: false,
+
       Widget child,
       this.onImageEmit})
       : assert(refreshIndicatorLayoutExtent != null),
         assert(refreshIndicatorLayoutExtent >= 0.0),
         assert(hasLayoutExtent != null),
         super(child: child);
+
+  final double paintOriginYOffset;
 
   final double refreshIndicatorLayoutExtent;
 
@@ -343,6 +351,7 @@ class _LSRefreshSliver extends SingleChildRenderObjectWidget {
   @override
   _RenderLSRefreshSliver createRenderObject(BuildContext context) {
     return new _RenderLSRefreshSliver(
+        paintOriginYOffset: paintOriginYOffset,
         refreshIndicatorExtent: refreshIndicatorLayoutExtent,
         hasLayoutExtent: hasLayoutExtent,
         onImageEmit: onImageEmit);
@@ -363,6 +372,7 @@ class _RenderLSRefreshSliver extends RenderSliver
       {@required double refreshIndicatorExtent,
       @required bool hasLayoutExtent,
       RenderBox child,
+      this.paintOriginYOffset : 0.0,
       this.onImageEmit})
       : assert(refreshIndicatorExtent != null),
         assert(refreshIndicatorExtent >= 0.0),
@@ -374,6 +384,7 @@ class _RenderLSRefreshSliver extends RenderSliver
   final _RawImageCallback onImageEmit;
   double get refreshIndicatorLayoutExtent => _refreshIndicatorExtent;
   double _refreshIndicatorExtent;
+  double paintOriginYOffset;
   set refreshIndicatorLayoutExtent(double value) {
     assert(value != null);
     assert(value >= 0.0);
@@ -432,7 +443,7 @@ class _RenderLSRefreshSliver extends RenderSliver
         0.0,
       );
       var layoutET = max(layoutExtent - constraints.scrollOffset, 0.0);
-      var paintOrigin = -overscrolledExtent - constraints.scrollOffset;
+      var paintOrigin = -overscrolledExtent - constraints.scrollOffset + paintOriginYOffset;
       geometry = new SliverGeometry(
         scrollExtent: layoutExtent,
         paintOrigin: paintOrigin,

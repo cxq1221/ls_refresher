@@ -21,7 +21,7 @@ class _DemoState extends State<Demo> {
   }
 
   double outExtent = 0.0;
-  int _listCount = 14;
+  int _listCount = 30;
   ScrollController _scrollController = new ScrollController();
   @override
   Widget build(BuildContext context) {
@@ -35,26 +35,26 @@ class _DemoState extends State<Demo> {
           controller: _scrollController,
           physics: new AlwaysScrollableScrollPhysics(),
           slivers: <Widget>[
-            new LSTopRefresher.image('images/giphy.gif', 'images/bread.gif',
-                onRefresh: () {
-              return new Future<void>.delayed(const Duration(seconds: 2))
-                ..then((re) {
-                  setState(() {
-                    changeRandomList();
-                  });
-                });
-            }),
-//            new LSTopRefresher.simple(onRefresh: () {
+//            new LSTopRefresher.image('images/giphy.gif', 'images/bread.gif',
+//                onRefresh: () {
 //              return new Future<void>.delayed(const Duration(seconds: 2))
 //                ..then((re) {
 //                  setState(() {
 //                    changeRandomList();
-//                    _scrollController.animateTo(0.0,
-//                        duration: new Duration(milliseconds: 100),
-//                        curve: Curves.bounceOut);
 //                  });
 //                });
 //            }),
+            new LSTopRefresher.simple(onRefresh: () {
+              return new Future<void>.delayed(const Duration(seconds: 2))
+                ..then((re) {
+                  setState(() {
+                    changeRandomList();
+                    _scrollController.animateTo(0.0,
+                        duration: new Duration(milliseconds: 100),
+                        curve: Curves.bounceOut);
+                  });
+                });
+            }),
             new SliverSafeArea(
               sliver: new SliverList(
                 delegate: new SliverChildBuilderDelegate(
@@ -70,19 +70,7 @@ class _DemoState extends State<Demo> {
                 ),
               ),
             ),
-//              new LSBottomRefresher.simple(
-//                onRefresh: () {
-//                  return new Future<void>.delayed(const Duration(seconds: 2))
-//                    ..then((re) {
-////                      setState(() {
-////                        _listCount += 1;
-////                      });
-//                    });
-//                },
-//              )
-            new LSBottomRefresher.image(
-              'images/ice.gif',
-              'images/sea.gif',
+            new LSBottomRefresher.simple(
               onRefresh: () {
                 return new Future<void>.delayed(const Duration(seconds: 2))
                   ..then((re) {
@@ -92,6 +80,18 @@ class _DemoState extends State<Demo> {
                   });
               },
             )
+//            new LSBottomRefresher.image(
+//              'images/ice.gif',
+//              'images/sea.gif',
+//              onRefresh: () {
+//                return new Future<void>.delayed(const Duration(seconds: 2))
+//                  ..then((re) {
+//                    setState(() {
+//                      _listCount += 1;
+//                    });
+//                  });
+//              },
+//            )
           ],
         ),
       ),
@@ -155,6 +155,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
 class Demo extends StatefulWidget {
   static const String routeName = '/cupertino/refresh';
+
+  test() {
+    new Image.network('');
+  }
 
   @override
   _DemoState createState() => new _DemoState();
