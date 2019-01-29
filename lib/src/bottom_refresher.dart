@@ -301,11 +301,6 @@ class LSRenderSliverToBoxAdapter extends RenderSliverSingleBoxAdapter {
     bool onRefreshExtent = (constraints.remainingPaintExtent - _getChildExtent()).abs() < 3;
 
     bool outOfViewport = constraints.remainingPaintExtent <= 0;
-
-    print(_refreshState);
-    print(constraints.remainingPaintExtent);
-    print(refreshTriggerPullDistance);
-    print(_getChildExtent());
     switch (_refreshState) {
       case LSRefreshState.inactive:
         _loadComplete = false;
