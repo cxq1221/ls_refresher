@@ -112,7 +112,7 @@ class LSBottomRefresher extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return new LSRefresherState(
-        onRefresh: onRefresh, dragGif: dragGif, refreshGif: refreshGif);
+        onRefresh: onRefresh, dragGif: dragGif, refreshGif: refreshGif, refreshIndicatorExtent: refreshIndicatorExtent, refreshTriggerPullDistance: refreshTriggerPullDistance);
   }
 }
 
@@ -130,8 +130,8 @@ class LSRefresherState extends State<LSBottomRefresher> {
   var lastIndexOfGifImage = 0;
   LSRefresherState(
       {this.onRefresh,
-      this.refreshTriggerPullDistance: kDefaultRefreshTriggerPullDistance,
-      this.refreshIndicatorExtent: kDefaultRefreshIndicatorExtent,
+      this.refreshTriggerPullDistance,
+      this.refreshIndicatorExtent,
       this.refreshGif,
       this.dragGif});
 
@@ -188,8 +188,8 @@ class LSSliverToBoxAdapter extends SingleChildRenderObjectWidget {
   const LSSliverToBoxAdapter(
       {Key key,
       Widget child,
-      this.refreshTriggerPullDistance: kDefaultRefreshTriggerPullDistance,
-      this.refreshIndicatorExtent: kDefaultRefreshIndicatorExtent,
+      this.refreshTriggerPullDistance,
+      this.refreshIndicatorExtent,
       this.onRefresh,
       this.onScrollExtentChange,
       this.onRefreshStateChange,
@@ -201,8 +201,8 @@ class LSSliverToBoxAdapter extends SingleChildRenderObjectWidget {
   @override
   LSRenderSliverToBoxAdapter createRenderObject(BuildContext context) =>
       new LSRenderSliverToBoxAdapter(
-          refreshTriggerPullDistance: kDefaultRefreshTriggerPullDistance,
-          refreshIndicatorExtent: kDefaultRefreshIndicatorExtent,
+          refreshTriggerPullDistance: refreshTriggerPullDistance,
+          refreshIndicatorExtent: refreshIndicatorExtent,
           onRefresh: onRefresh,
           onImageEmit: onImageEmit,
           onScrollExtentChange: onScrollExtentChange,
@@ -245,8 +245,8 @@ class LSRenderSliverToBoxAdapter extends RenderSliverSingleBoxAdapter {
       this.onRefresh,
       this.onImageEmit,
       this.onScrollExtentChange,
-      this.refreshTriggerPullDistance: kDefaultRefreshTriggerPullDistance,
-      this.refreshIndicatorExtent: kDefaultRefreshIndicatorExtent,
+      this.refreshTriggerPullDistance,
+      this.refreshIndicatorExtent,
       this.onRefreshStateChange})
       : super(child: child) {
     createImageProviderIfNull();
@@ -302,6 +302,10 @@ class LSRenderSliverToBoxAdapter extends RenderSliverSingleBoxAdapter {
 
     bool outOfViewport = constraints.remainingPaintExtent <= 0;
 
+    print(_refreshState);
+    print(constraints.remainingPaintExtent);
+    print(refreshTriggerPullDistance);
+    print(_getChildExtent());
     switch (_refreshState) {
       case LSRefreshState.inactive:
         _loadComplete = false;
