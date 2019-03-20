@@ -112,7 +112,11 @@ class LSBottomRefresher extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return new LSRefresherState(
-        onRefresh: onRefresh, dragGif: dragGif, refreshGif: refreshGif, refreshIndicatorExtent: refreshIndicatorExtent, refreshTriggerPullDistance: refreshTriggerPullDistance);
+        onRefresh: onRefresh,
+        dragGif: dragGif,
+        refreshGif: refreshGif,
+        refreshIndicatorExtent: refreshIndicatorExtent,
+        refreshTriggerPullDistance: refreshTriggerPullDistance);
   }
 }
 
@@ -228,7 +232,6 @@ class LSRenderSliverToBoxAdapter extends RenderSliverSingleBoxAdapter {
   int _lastIndexOfGifImage = -1;
   LSImageProvider _dragImageProvider;
   LSImageProvider _refreshImageProvider;
-  bool isContentOverSize;
 
   LSImageProvider get imageProvider {
     if (_refreshState == LSRefreshState.drag) {
@@ -298,7 +301,8 @@ class LSRenderSliverToBoxAdapter extends RenderSliverSingleBoxAdapter {
             constraints.remainingPaintExtent > 0;
     bool beyondTriggerRefreshExtent =
         constraints.remainingPaintExtent > refreshTriggerPullDistance;
-    bool onRefreshExtent = (constraints.remainingPaintExtent - _getChildExtent()).abs() < 3;
+    bool onRefreshExtent =
+        (constraints.remainingPaintExtent - _getChildExtent()).abs() < 3;
 
     bool outOfViewport = constraints.remainingPaintExtent <= 0;
     switch (_refreshState) {
@@ -355,14 +359,6 @@ class LSRenderSliverToBoxAdapter extends RenderSliverSingleBoxAdapter {
       return;
     }
     child.layout(constraints.asBoxConstraints(), parentUsesSize: true);
-    if (isContentOverSize == null) {
-      isContentOverSize = constraints.remainingPaintExtent <= 0.0;
-    }
-    if (!isContentOverSize) {
-      geometry = SliverGeometry.zero;
-      return;
-    }
-
     double childExtent = _getChildExtent();
     final double paintedChildSize =
         calculatePaintOffset(constraints, from: 0.0, to: childExtent);
@@ -397,7 +393,6 @@ class LSRenderSliverToBoxAdapter extends RenderSliverSingleBoxAdapter {
         _loadComplete = true;
         onRefresh = _onRefreshTemp;
         markNeedsLayout();
-
       });
       _onRefreshTemp = onRefresh;
       onRefresh = null;
